@@ -53,17 +53,10 @@ def pdf_convert_text(pdf_file_name:str, text_file_name:str, rectangle_coordinate
         f.write(file_text_string)
     print("convert pdf to text success")
 
-def pdf_convert_text_one_page(pdf_file_name:str, page_index, rectangle_coordinates:Rect) -> str:
+def display_pdf_text_one_page(pdf_file_name:str, page_index:int) -> None:
     pdf_object = fitz.open(pdf_file_name)
-    file_text_string = extract_text_one_page(pdf_object, page_index, rectangle_coordinates)
-    return file_text_string
-    
-if __name__ == '__main__':
-    pdf_file_name = "./test.pdf"
-    rect = (80,100,510,730)
-    print(pdf_file_name, rect)
-    value_string_1 = extract_text_one_page(pdf_file_name, 2, rect)
-    value_string_2 = pdf_convert_text_one_page(pdf_file_name, 2, rect)
-    # assert value_string_1 == value_string_2
-    text_file_name = u"./test.txt"
-    pdf_convert_text(pdf_file_name, text_file_name, rect)
+    page = pdf_object[page_index]
+    for box in page.get_text("blocks"):
+        if box[-1] == 0: ##<- 0 is text, 1 is image, 2 is line
+            print(box[0:5])
+    pass
