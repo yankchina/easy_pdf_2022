@@ -5,6 +5,10 @@ import codecs
 
 Rect  = Tuple[int, int, int, int]
 
+
+def get_page_size(page:Any) -> Tuple[int, int]:
+    return page.rect.width, page.rect.height
+
 def rectangle_inside(rect1:Rect,rect2:Rect):
     if rect1[0] >= rect2[0] and rect1[1] >= rect2[1] and rect1[2] <= rect2[2] and rect1[3] <= rect2[3]:
         return True
@@ -52,6 +56,13 @@ def pdf_convert_text(pdf_file_name:str, text_file_name:str, rectangle_coordinate
     with codecs.open(text_file_name, "w", "utf-8") as f:
         f.write(file_text_string)
     print("convert pdf to text success")
+    
+def pdf_convert_text_with_margin_percentage(pdf_file_name:str, text_file_name:str, margin_percentage:float) -> None:
+    pdf_object = fitz.open(pdf_file_name)
+    page_width, page_height = get_page_size(pdf_object[0])
+    rectangle_coordinates = (int(page_width * margin_percentage), int(page_height * margin_percentage), int(page_width * (1 - margin_percentage)), int(page_height * (1 - margin_percentage)))
+    pdf_convert_text(pdf_file_name, text_file_name, rectangle_coordinates)
+    pass
 
 def display_pdf_text_one_page(pdf_file_name:str, page_index:int) -> None:
     pdf_object = fitz.open(pdf_file_name)
