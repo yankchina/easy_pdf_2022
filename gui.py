@@ -1,18 +1,20 @@
 # encoding: utf-8
-from email.policy import default
 from gooey import Gooey,GooeyParser
-from easy_pdf import pdf_convert_text_with_margin_percentage
+from EasyPdf import PdfConvertor
 
 # 建立一个 GUI 窗口
 # Create a GUI window
-@Gooey (program_name = "PDF to Text", program_description = "Convert PDF to Text")
+@Gooey (program_name = "PDF to Text", 
+        required_cols=1,
+        program_description = "Convert PDF to Text With Margin")
 def main():
     parser = GooeyParser()
-    parser.add_argument("pdf_file_name", help = "PDF file name", widget = "FileChooser")
-    parser.add_argument("text_file_name", help = "Text file name", widget = "FileSaver")
-    parser.add_argument("margin_percentage", help = "margin_percentage",default='0.1')
+    parser.add_argument("pdf_path", help = "scan directory", widget = "DirChooser")
+    parser.add_argument("margin_conf", help = "margin_conf",default='0.1,0.1,0.1,0.1')
     args = parser.parse_args()
-    pdf_convert_text_with_margin_percentage(args.pdf_file_name, args.text_file_name, float(args.margin_percentage))
+    obj = PdfConvertor()
+    margin_conf = tuple(map(float,args.margin_conf.split(',')))
+    obj.bash_convert_with_margin(args.pdf_path, margin_conf=margin_conf)
     pass
 
 if __name__ == '__main__':

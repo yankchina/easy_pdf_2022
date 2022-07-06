@@ -14,14 +14,14 @@ class PdfConvertor:
     
     def bash_convert_with_margin(self, dir_path:str, margin_conf: Tuple) -> bool:
         dir_path = os.path.abspath(dir_path)
+        print(dir_path)
         pdf_files = get_all_pdf_files(dir_path)
+        print(pdf_files)
         for pdf_file in pdf_files:
             pdf_file_path = os.path.join(dir_path, pdf_file)
             text_file_path = get_output_file_path(pdf_file)
             print(u"converting {0} -> {1}".format(pdf_file_path,text_file_path))
-            flag = self.convert_with_margin(pdf_file_path, text_file_path, margin_conf)
-            if not flag: # if convertion failed, stop the loop
-                break
+            self.convert_with_margin(pdf_file_path, text_file_path, margin_conf)
         pass
     
     def convert_with_margin(self, pdf_file_path: str, output_file_path: str, margin_conf: Tuple) -> bool:
@@ -39,6 +39,7 @@ class PdfConvertor:
                 output_file.write("\n".join(lines))
             print(u"convertion success {0}->{1}".format(pdf_file_path, output_file_path))
             flag = True
+            return flag
         except Exception as e:
             print(e)
             flag = False
